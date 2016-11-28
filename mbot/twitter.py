@@ -107,17 +107,26 @@ class Twitter:
         screen_name : str
             the twitter handle which you want to get tweets for
 
+        Returns
+        -------
+        list
+            list of lists containing:
+                * user id
+                * user screen name
+                * tweet created_at date
+                * tweet text
         """
         tweets = []
         try:
             statuses = tweepy.Cursor(self.api.user_timeline,
                                      screen_name=screen_name,
-                                     include_rts=True).items(10)
+                                     include_rts=True).items()
 
             log.info('getting tweets for user: {0}'.format(screen_name))
             for status in statuses:
                 tweets.append([status.user.id,
                                status.user.screen_name,
+                               status.created_at,
                                status.text])
 
             return tweets
