@@ -39,12 +39,21 @@ class TestTwitter(unittest.TestCase):
     @mock.patch.object(tweepy.API, "user_timeline")
     def test_twitter_get_tweets(self, mock_timeline, mock_cursor):
         twitter_test = Twitter(credentials_file="tests/data/config_test.ini")
-        mocked_tweets = twitter_test.get_tweets("twitter_user")
+
 
         #normal usage
+        mocked_tweets = twitter_test.get_tweets("twitter_user")
+        mock_cursor.assert_called_with(mock_timeline,
+                                       screen_name="twitter_user",
+                                       include_rts=False)
+
+        #normal usage
+        mocked_tweets = twitter_test.get_tweets("twitter_user",
+                                                include_rts=True)
         mock_cursor.assert_called_with(mock_timeline,
                                        screen_name="twitter_user",
                                        include_rts=True)
+
         #exception
         mock_cursor.side_effect = tweepy.TweepError('Mock Exception')
         self.assertRaises(tweepy.TweepError,
