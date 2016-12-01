@@ -99,7 +99,7 @@ class Twitter:
         return tweepy.API(auth)
 
 
-    def get_tweets(self, screen_name):
+    def get_tweets(self, screen_name, include_rts=False):
         """Get the tweets from a paticular users timeline to help build a corpus
 
         Parameters
@@ -120,7 +120,7 @@ class Twitter:
         try:
             statuses = tweepy.Cursor(self.api.user_timeline,
                                      screen_name=screen_name,
-                                     include_rts=True).items()
+                                     include_rts=include_rts).items()
 
             log.info('getting tweets for user: {0}'.format(screen_name))
             for status in statuses:
