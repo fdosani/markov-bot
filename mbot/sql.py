@@ -16,12 +16,8 @@ def create_table():
     with conn:
         cur = conn.cursor()
 
-        create_sql = """
-                        CREATE TABLE tweets(user_id INT,
-                                            screen_name TEXT,
-                                            created_at TEXT,
-                                            tweet TEXT)
-                     """
+        create_sql = ("CREATE TABLE tweets(user_id INT, "
+                      "screen_name TEXT, created_at TEXT, tweet TEXT)")
         cur.execute(create_sql)
 
 
