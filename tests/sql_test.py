@@ -43,7 +43,7 @@ class TestSQL(unittest.TestCase):
 
         screen_name = "twitter_user"
         create_sql = ("SELECT tweet from tweets "
-                      "where screen_name = '{0}'".format(screen_name))
+                      "where screen_name = ?")
         return_data = [["tweet1",], ["tweet2",]]
         mock_sql.return_value.cursor.return_value.\
                               fetchall.return_value = return_data
@@ -55,12 +55,38 @@ class TestSQL(unittest.TestCase):
         mock_sql.return_value.cursor.assert_called_with()
 
         mock_sql.return_value.cursor.return_value.\
-                              execute.assert_called_with(create_sql)
+                              execute.assert_called_with(create_sql,
+                                                         (screen_name,))
 
         mock_sql.return_value.cursor.return_value.\
                               fetchall.assert_called_with()
 
         self.assertEquals(actual, "tweet1\ntweet2\n")
+
+
+    @mock.patch.object(sql.sqlite3, "connect")
+    def test_sql_select_max_tweet_id(self, mock_sql):
+
+        screen_name = "twitter_user"
+        create_sql = "SELECT MAX(tweet_id) from tweets where screen_name = ?"
+        return_data = (1234,)
+        mock_sql.return_value.cursor.return_value.\
+                              fetchone.return_value = return_data
+
+
+        actual = sql.select_max_tweet_id(screen_name)
+
+        mock_sql.assert_called_with(sql.DB_OBJECT)
+        mock_sql.return_value.cursor.assert_called_with()
+
+        mock_sql.return_value.cursor.return_value.\
+                              execute.assert_called_with(create_sql,
+                                                         (screen_name,))
+
+        mock_sql.return_value.cursor.return_value.\
+                              fetchone.assert_called_with()
+
+        self.assertEquals(actual, 1234)
 
 
 
