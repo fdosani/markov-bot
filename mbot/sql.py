@@ -17,7 +17,8 @@ def create_table():
         cur = conn.cursor()
 
         create_sql = ("CREATE TABLE tweets(user_id INT, "
-                      "screen_name TEXT, created_at TEXT, tweet TEXT)")
+                      "screen_name TEXT, tweet_id INT, "
+                      "created_at TEXT, tweet TEXT)")
         cur.execute(create_sql)
 
 
@@ -36,7 +37,7 @@ def insert_records(records):
 
     with conn:
         cur = conn.cursor()
-        insert_sql = "INSERT INTO tweets VALUES (?,?,?,?)"
+        insert_sql = "INSERT INTO tweets VALUES (?,?,?,?,?)"
         cur.executemany(insert_sql, records)
 
 

@@ -11,8 +11,8 @@ class TestSQL(unittest.TestCase):
     @mock.patch.object(sql.sqlite3, "connect")
     def test_sql_create_table(self, mock_sql):
 
-        create_sql = ("CREATE TABLE tweets(user_id INT, "
-                     "screen_name TEXT, created_at TEXT, tweet TEXT)")
+        create_sql = ("CREATE TABLE tweets(user_id INT, screen_name TEXT, "
+                      "tweet_id INT, created_at TEXT, tweet TEXT)")
 
         sql.create_table()
         mock_sql.assert_called_with(sql.DB_OBJECT)
@@ -25,8 +25,8 @@ class TestSQL(unittest.TestCase):
     @mock.patch.object(sql.sqlite3, "connect")
     def test_sql_insert_records(self, mock_sql):
 
-        insert_sql = "INSERT INTO tweets VALUES (?,?,?,?)"
-        insert_data = [[1,2,3,4],[5,6,7,8]]
+        insert_sql = "INSERT INTO tweets VALUES (?,?,?,?,?)"
+        insert_data = [[1,2,3,4,5],[6,7,8,9,10]]
 
         sql.insert_records(insert_data)
         mock_sql.assert_called_with(sql.DB_OBJECT)
@@ -63,6 +63,6 @@ class TestSQL(unittest.TestCase):
         self.assertEquals(actual, "tweet1\ntweet2\n")
 
 
-        
+
 if __name__ == '__main__':
     unittest.main()

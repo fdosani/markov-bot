@@ -99,8 +99,15 @@ class Twitter:
         return tweepy.API(auth)
 
 
-    def get_tweets(self, screen_name, include_rts=False):
-        """Get the tweets from a paticular users timeline to help build a corpus
+    def get_all_tweets(self, screen_name, include_rts=False):
+        """Get the all tweets from a paticular users timeline to help build a
+        corpus. Is not date sensitve and will get ALL tweets it can.
+
+        Note
+        ----
+        Twitter only allows 3200 tweets to be returned so if this is a new
+        users tweets which you are grabbing, please keep that in mind.
+
 
         Parameters
         ----------
@@ -113,6 +120,7 @@ class Twitter:
             list of lists containing:
                 * user id
                 * user screen name
+                * tweet id
                 * tweet created_at date
                 * tweet text
         """
@@ -126,6 +134,7 @@ class Twitter:
             for status in statuses:
                 tweets.append([status.user.id,
                                status.user.screen_name,
+                               status.id,
                                status.created_at,
                                status.text])
 
