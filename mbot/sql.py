@@ -22,7 +22,7 @@ def create_table():
         cur.execute(create_sql)
 
 
-def insert_records(records):
+def insert_tweets(records):
     """
     Function to insert list (sequence of records) of records into database
 
@@ -98,5 +98,5 @@ def select_max_tweet_id(screen_name):
         create_sql = "SELECT MAX(tweet_id) from tweets where screen_name = ?"
         cur.execute(create_sql, (screen_name,))
         id = cur.fetchone()
-        
+
     return id[0]

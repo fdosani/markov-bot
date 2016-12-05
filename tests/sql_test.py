@@ -23,12 +23,12 @@ class TestSQL(unittest.TestCase):
 
 
     @mock.patch.object(sql.sqlite3, "connect")
-    def test_sql_insert_records(self, mock_sql):
+    def test_sql_insert_tweets(self, mock_sql):
 
         insert_sql = "INSERT INTO tweets VALUES (?,?,?,?,?)"
         insert_data = [[1,2,3,4,5],[6,7,8,9,10]]
 
-        sql.insert_records(insert_data)
+        sql.insert_tweets(insert_data)
         mock_sql.assert_called_with(sql.DB_OBJECT)
         mock_sql.return_value.cursor.assert_called_with()
 

@@ -6,4 +6,4 @@ twitter_user = "realDonaldTrump"
 trump = Twitter()
 since_id = sql.select_max_tweet_id(twitter_user)
 trumps_tweets = trump.get_tweets(twitter_user, since_id)
-sql.insert_records(trumps_tweets)
+sql.insert_tweets(trumps_tweets)

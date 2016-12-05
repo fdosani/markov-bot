@@ -4,4 +4,4 @@ twitter_user = "realDonaldTrump"
 #grab all of donalds tweets
 trump = Twitter()
 trumps_tweets = trump.get_tweets(twitter_user)
-sql.insert_records(trumps_tweets)
+sql.insert_tweets(trumps_tweets)
