@@ -10,17 +10,9 @@ import tweepy
 
 
 class Twitter:
-    """Exceptions are documented in the same way as classes.
-
-    The __init__ method may be documented in either the class level
-    docstring, or as a docstring on the __init__ method itself.
-
-    Either form is acceptable, but the two should not be mixed. Choose one
-    convention to document the __init__ method and be consistent with it.
-
-    Note
-    ----
-    Do not include the `self` parameter in the ``Parameters`` section.
+    """Twitter class which is meant to interact with the Twitter API. It will
+    manage reading the API keys and secrets from a ``ini`` file, and also get
+    all tweets (statuses) for a user or since a paticular status id
 
     Parameters
     ----------
@@ -99,13 +91,29 @@ class Twitter:
         return tweepy.API(auth)
 
 
-    def get_tweets(self, screen_name, include_rts=False):
-        """Get the tweets from a paticular users timeline to help build a corpus
+    def get_tweets(self, screen_name, since_id=None, include_rts=False):
+        """Get the tweets from a paticular users timeline to help build a
+        corpus. Is not date sensitve and will get ALL tweets it can.
+
+        Note
+        ----
+        Twitter only allows 3200 tweets to be returned so if this is a new
+        users tweets which you are grabbing, please keep that in mind.
+
 
         Parameters
         ----------
         screen_name : str
             the twitter handle which you want to get tweets for
+
+        since_id : int, optional
+            the status(tweet) id to get rest of timeline since. This will
+            help in getting most recent tweets rather than getting them all
+            again. If ``None`` then get all tweets possible.
+
+        include_rts : bool, optional
+            True or False on if you would like to include retweets from
+            timeline.
 
         Returns
         -------
@@ -113,19 +121,27 @@ class Twitter:
             list of lists containing:
                 * user id
                 * user screen name
+                * tweet id
                 * tweet created_at date
                 * tweet text
         """
         tweets = []
         try:
-            statuses = tweepy.Cursor(self.api.user_timeline,
-                                     screen_name=screen_name,
-                                     include_rts=include_rts).items()
+            if since_id is None:
+                statuses = tweepy.Cursor(self.api.user_timeline,
+                                         screen_name=screen_name,
+                                         include_rts=include_rts).items()
+            else:
+                statuses = tweepy.Cursor(self.api.user_timeline,
+                                         screen_name=screen_name,
+                                         since_id=since_id,
+                                         include_rts=include_rts).items()
 
             log.info('getting tweets for user: {0}'.format(screen_name))
             for status in statuses:
                 tweets.append([status.user.id,
                                status.user.screen_name,
+                               status.id,
                                status.created_at,
                                status.text])
 

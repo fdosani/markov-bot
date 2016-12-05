@@ -48,10 +48,26 @@ class TestTwitter(unittest.TestCase):
                                        include_rts=False)
 
         #normal usage
+        mocked_tweets = twitter_test.get_tweets("twitter_user", since_id=1234)
+        mock_cursor.assert_called_with(mock_timeline,
+                                       screen_name="twitter_user",
+                                       since_id=1234,
+                                       include_rts=False)
+
+        #normal usage
         mocked_tweets = twitter_test.get_tweets("twitter_user",
                                                 include_rts=True)
         mock_cursor.assert_called_with(mock_timeline,
                                        screen_name="twitter_user",
+                                       include_rts=True)
+
+
+        #normal usage
+        mocked_tweets = twitter_test.get_tweets("twitter_user", since_id=1234,
+                                                include_rts=True)
+        mock_cursor.assert_called_with(mock_timeline,
+                                       screen_name="twitter_user",
+                                       since_id=1234,
                                        include_rts=True)
 
         #exception
@@ -74,11 +90,13 @@ class TestTwitter(unittest.TestCase):
 
         status_1 = tweepy.models.Status()
         status_1.text = "A mocked up tweet"
+        status_1.id = 1
         status_1.created_at = "2016-01-01"
         status_1.user = mock_user
 
         status_2 = tweepy.models.Status()
         status_2.text = "A mocked up tweet number two"
+        status_2.id = 2
         status_2.created_at = "2016-01-02"
         status_2.user = mock_user
 
@@ -88,9 +106,11 @@ class TestTwitter(unittest.TestCase):
         mocked_tweets = twitter_test.get_tweets("twitter_user")
 
         self.assertEquals(mocked_tweets, [[mock_user.id, mock_user.screen_name,
-                                           status_1.created_at, status_1.text],
+                                           status_1.id, status_1.created_at,
+                                           status_1.text],
                                           [mock_user.id, mock_user.screen_name,
-                                           status_2.created_at, status_2.text]])
+                                           status_2.id, status_2.created_at,
+                                           status_2.text]])
 
 if __name__ == '__main__':
     unittest.main()
