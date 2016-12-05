@@ -78,6 +78,8 @@ def select_tweets(screen_name):
 def select_max_tweet_id(screen_name):
     """
     Function to select the max tweet id for a paticlar user in the database
+    If the User does not exist then ``None`` is returned otherwise an ``int``
+    is.
 
     Parameters
     ----------
@@ -96,4 +98,5 @@ def select_max_tweet_id(screen_name):
         create_sql = "SELECT MAX(tweet_id) from tweets where screen_name = ?"
         cur.execute(create_sql, (screen_name,))
         id = cur.fetchone()
+        
     return id[0]
